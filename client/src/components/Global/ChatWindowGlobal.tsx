@@ -5,6 +5,7 @@ import ChatMessages from '../shared/ChatMessages';
 import { RandomGlobalChatHeader } from '../shared/RandomGlobalChatHeader';
 import { useGlobalSocket } from '@/hooks/useGlobalSocket';
 import { ChatInputGlobal } from './ChatInputGlobal';
+import { MinimalCenteredModal } from '../shared/MotionModal';
 
 interface Props {
     initialMessages: ClientPrivateMessage[];
@@ -15,6 +16,8 @@ export default function ChatWindowGlobal({initialMessages}: Props) {
     const [chatIdentifier, setChatIdentifier] = useState<string | undefined>(undefined);
     const [usersTyping , setUsersTyping] = useState<string[]>([])
 
+    //* TEMPORARY:
+    const [showModal, setShowModal] = useState(true);
     
 
     const insertMessage = (newMessage: ClientPrivateMessage) => {
@@ -28,6 +31,8 @@ export default function ChatWindowGlobal({initialMessages}: Props) {
 
 
 
+    //* TEMPORARY:
+    return        <MinimalCenteredModal show={showModal} onClose={() => setShowModal(false)} />
      
     
     if (!chatIdentifier) return null;  //- Under the hood the component first returns null and as soon as the shed identifier is ready it renders the component.
@@ -45,6 +50,7 @@ export default function ChatWindowGlobal({initialMessages}: Props) {
                     <ChatInputGlobal insertMessage={insertMessage} disabled={disabled}></ChatInputGlobal>
                 </div>
             </div>
+            <MinimalCenteredModal show={showModal} onClose={() => setShowModal(false)} />
         </>
     );
 }

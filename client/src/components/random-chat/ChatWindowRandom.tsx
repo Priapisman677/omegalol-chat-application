@@ -8,6 +8,7 @@ import { useSession } from '@/context/session-context';
 import { RandomGlobalChatHeader } from '../shared/RandomGlobalChatHeader';
 import { InviteToRoomButton } from './InviteToRoomButton';
 import { ChatInputRandom } from './ChatInputRandom';
+import { MinimalCenteredModal } from '../shared/MotionModal';
 // import { useChatSocket } from '@/hooks/useChatSocket';
 // import {ChatHeader} from './chat_header/ChatHeader';
 
@@ -18,7 +19,8 @@ interface Props {
 export default function ChatWindowRandom({ }: Props) {
     const [messages, setMessages] = useState<ClientPrivateMessage[]>([]);
     const [usersTyping , setUsersTyping] = useState<string[]>([])
-
+        //* TEMPORARY:
+    const [showModal, setShowModal] = useState(true);
 
     const insertMessage = (newMessage: ClientPrivateMessage) => {
         setMessages((prev) => [...prev, newMessage]);
@@ -44,6 +46,7 @@ export default function ChatWindowRandom({ }: Props) {
                     </div>
                 </div>
             </div>
+            <MinimalCenteredModal show={showModal} onClose={() => setShowModal(false)} />
         </>
     );
 }

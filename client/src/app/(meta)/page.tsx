@@ -1,9 +1,13 @@
 "use client"
 
+import { MinimalCenteredModal } from '@/components/shared/MotionModal';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function HomePage() {
 
+      //* TEMPORARY:
+    const [showModal, setShowModal] = useState(true);
 
 
   return (
@@ -41,6 +45,7 @@ export default function HomePage() {
 
         </div>
       </div>
+      <MinimalCenteredModal show={showModal} onClose={() => setShowModal(false)} />
     </>
   );
 }

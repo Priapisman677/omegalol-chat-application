@@ -1,6 +1,7 @@
 'use client';
 
 import { _signUp, signUp } from '@/actions/user-actions/sign-up';
+import { MinimalCenteredModal } from '@/components/shared/MotionModal';
 import { useSession } from '@/context/session-context';
 // import { useSession } from '@/context/session-context';
 import Link from 'next/link';
@@ -12,6 +13,8 @@ export default function SignUp() {
 	const {setSession, session} = useSession()
     const [feedback, setFeedback] = useState<{success: boolean, msg: string} | null>(null)
 
+	      //* TEMPORARY:
+	const [showModal, setShowModal] = useState(true);
 
 	const router = useRouter()
 
@@ -110,6 +113,7 @@ export default function SignUp() {
 					</Link>
 				</p>
 			</form>
+			<MinimalCenteredModal show={showModal} onClose={() => setShowModal(false)} />
 		</>
 	);
 }

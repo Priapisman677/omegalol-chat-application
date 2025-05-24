@@ -70,7 +70,7 @@ export function MinimalCenteredModal({ show, onClose }: Props) {
             className="bg-[#131313] border border-[#202020] rounded-xl w-full max-w-md p-6 text-white"
           >
             <p className="text-center font-bold mb-3">May 20  - Inactive Sockets notice 🔴</p>
-            <p className="text-center  mb-4"> Thanks to everyone who tried the app. The Socket server will be down after May 20th. I cannot moderate the content shared on this app alone without a team.  It will be see-only.  </p>
+            <p className="text-center  mb-4"> Thanks to everyone who tried the app. The Socket server will be down after May 20th. I cannot moderate the content shared on this app alone without a team.  It will be see-only  (TEST CHANGE).  </p>
             <div className="flex justify-center">
               <button
                 onClick={onClose}
