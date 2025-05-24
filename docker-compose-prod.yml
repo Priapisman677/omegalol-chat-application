@@ -1,0 +1,4 @@
+services:
+  client:
+    command: sh -c "npx prisma generate --schema=../shared/prisma/schema.prisma && npm run build && npm run start"
+    

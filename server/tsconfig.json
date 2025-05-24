@@ -1,0 +1,33 @@
+{
+	"compilerOptions": {
+		 /* Linting */
+		 "strict": true,
+		 "noUnusedLocals": true,
+		 "noUnusedParameters": true,
+		 "noFallthroughCasesInSwitch": true,
+		 "noUncheckedSideEffectImports": true,
+		 "sourceMap": true,
+		
+		/* Language and Environment */
+		"target": "es2022",
+
+		/* Modules */
+		"module": "NodeNext",
+
+		/* Emit */
+		// "rootDir": "../",
+		"esModuleInterop": true,
+		"skipLibCheck": true, 
+		"baseUrl": ".",
+		"paths": {
+			// "@generated/*": ["../shared/generated/*"],
+			"@shared/*":["../shared/*"]
+		}
+	},
+
+	"exclude": [
+		"node_modules",
+	],
+
+	"include": ["../shared/**/*", "src/**/*", "test/**/*"]
+}

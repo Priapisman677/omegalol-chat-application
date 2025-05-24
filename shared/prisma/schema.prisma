@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String     @id
+  username       String
+  email          String     @unique
+  hash           String
+  messages       Message[]
+  roomUsers      RoomUser[]
+  Room           Room[]
+  profilePicPath String?    @unique
+  country        String?
+  gender         Gender?    @default(unknown)
+  bio            String?
+
+  @@map("users")
+}
+
+model Room {
+  id          String     @id @default(uuid())
+  roomName    String
+  isPrivate   Boolean
+  createdAt   DateTime   @default(now())
+  messages    Message[]
+  roomUser    RoomUser[]
+  createdById String? // Made it optional in order to be able to delete users without deleting its rooms (SetNull).
+  roomPicPath String?
+  // Made "createdBy User?" optional too (User?)
+  createdBy   User?      @relation(fields: [createdById], references: [id], onDelete: SetNull) //No "set "SetNull", If the user gets deleted come up we don't want all the members of their room to be dropped outside of their room.
+
+  @@map("rooms")
+}
+
+model RoomUser {
+  //$ This table helps us have rooms holding different users (many - many). 
+  //$ We COULD NOT say something like "this room belongs to users (2, 9 , 26)" ---- A room itself is only related to up to 1 user.
+  //$ ADDITIONALLY (and OPTIONALLY), without this table how would we know what a role any user has for a room? And what options users have set for themselves in those rooms? 
+  //$  Rooms and users have an array of RoomUser (RoomUser[])
+
+  id             String   @id @default(uuid()) //$ another option is: @@id([userId, roomId])
+  userId         String
+  roomId         String
+  JoinedAt       DateTime @default(now())
+  role           RoomRole //$ optional: admin, member, etc.
+  unReadMessages Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roomId]) // prevent duplicate joins
+  @@map("room_users")
+}
+
+model Message {
+  id          String      @id @default(uuid())
+  timestamp   DateTime    @default(now())
+  textContent String?
+  fileUrl     String?
+  fileName    String?
+  mimeType    String?
+  size        Int?
+  messageType MessageType
+  roomId      String
+  room        Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  identifier  String //* This is just for global chat. 
+  bytes       Bytes? //* This is just for global chat.
+}
+
+enum MessageType {
+  //$ In your actual TypeScript code, these will be treated as string values.
+  text
+  file
+  event
+}
+
+enum RoomRole {
+  member
+  admin
+}
+
+enum Gender {
+  male
+  female
+  unknown
+}

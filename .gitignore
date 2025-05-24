@@ -1,0 +1,31 @@
+# Root-level ignores
+.env
+.DS_Store
+
+# Client-specific ignores
+/client/.next
+/client/node_modules
+/client/.env.local
+/client/.env
+
+/client/media
+
+# Server-specific ignores
+/server/node_modules
+/server/prisma/dev.db
+
+# Some of the .env's were submitted in the past but the configuration ".env*" works.
+.env* 
+
+# Prisma-specific ignores
+/shared/generated
+/shared/node_modules
+
+# Optional: OS / editor junk
+*.log
+*.swp
+*.swo
+*.bak
+*.tmp
+.idea/
+.vscode/

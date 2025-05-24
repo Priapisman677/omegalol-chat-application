@@ -1,0 +1,19 @@
+// {
+//     "compilerOptions": {
+//       "target": "ES2022",
+//       "module": "ESNext",
+//       "moduleResolution": "Node",
+//       "esModuleInterop": true,
+//       "strict": true,
+//       "types": ["jest"],
+//       "allowJs": true,
+//       "noEmit": true,
+//       "baseUrl": ".",
+//       "paths": {
+//         "@generated/*": ["../shared/generated/*"],
+//         "@shared/*":["../shared/*"]
+//       }
+//     },
+//     "include": ["**/*.test.ts", "**/*.test.tsx", "src", "../shared/**/*"]
+//   }
+  

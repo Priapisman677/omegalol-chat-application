@@ -1,0 +1,64 @@
+
+#¡The two configurations that we'll need to change if you run this in AWS are:
+#! ./client/.env.docker.aws_https_nginx
+#! command: sh -c "npx prisma generate --schema=../shared/prisma/schema.prisma && npm run build && npm run start"
+
+
+services:
+  backend:
+    build: ./server
+    ports:
+    - "3001:3001"
+    volumes:
+      - ./server/src:/app/src:ro
+      - ./shared:/shared #$ Needs to be the whole shared folder because prisma depends on package.json
+    command: sh -c "npx prisma generate --schema=../shared/prisma/schema.prisma && npm run devdocker"
+    restart: on-failure
+    env_file:
+      - ./server/.env.docker
+    depends_on:
+      - db
+      - chat-app-docker-redis
+    
+  client:
+    build: ./client
+    ports: 
+    - "3000:3000"
+    #! - "80:3000" If you're hosting on AWS with a domain name, browsers default to port 80. 443 is for https.
+    depends_on:
+      - backend
+      - chat-app-docker-redis
+      - db
+    volumes:
+      - ./client/src:/app/src:ro
+      - ./shared:/shared #$ Needs to be the whole shared folder because prisma depends on package.json. No ":ro" because we need to let prisma write to it.
+      #! Images will be a bind mound but it could be a named volume too. I'll leave the two versions.
+      - ./client/media:/app/media #$ make it a bind amount if you want it to be easier to modify and manage. 
+      # - media_data:/app/media #$ Not recommended,   Only use a named volume when you don’t care about easily inspecting or editing the files from your host.
+      
+    # env_file:
+      # - ./client/.env.docker.local #$ Only if you're running the container locally you want to use local host for NextJS, else, use:
+      # - ./client/.env.docker.aws_https_nginx
+      
+    #$ If for some reason you want to use dev mode use "npm run dev" instead of "npm run build && npm run start"
+    # command: sh -c "npx prisma generate --schema=../shared/prisma/schema.prisma && npm run dev"
+    # command: sh -c "npx prisma generate --schema=../shared/prisma/schema.prisma && npm run build && npm run start"
+    
+  db:
+    image: postgres
+    ports:
+    - "6000:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: carbon7
+      POSTGRES_DB: next-prisma-chat
+    volumes:
+      - paiky_data:/var/lib/postgresql/data
+  chat-app-docker-redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6677:6379"
+
+volumes: 
+  paiky_data:
+  # media_data: #% Did uncomment thus if you want a named volume instead of a bind mount. 

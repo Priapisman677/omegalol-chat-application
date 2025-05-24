@@ -1,0 +1,6 @@
+services:
+  client:
+    env_file:
+      - ./client/.env.docker.aws_https_nginx
+    command: sh -c "npx prisma generate --schema=../shared/prisma/schema.prisma && npm run build && npm run start"
+    
