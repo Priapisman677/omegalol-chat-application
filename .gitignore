@@ -7,16 +7,17 @@
 /client/node_modules
 /client/.env.local
 /client/.env
-
+/client/test/
 /client/media
 
 # Server-specific ignores
 /server/node_modules
 /server/prisma/dev.db
+/server/test
 
 # Some of the .env's were submitted in the past but the configuration ".env*" works.
 .env* 
-
+!.env.example
 # Prisma-specific ignores
 /shared/generated
 /shared/node_modules
@@ -29,3 +30,5 @@
 *.tmp
 .idea/
 .vscode/
+
+
